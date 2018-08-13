@@ -1,6 +1,7 @@
 package cn.leo.passwordinput;
 
 import android.content.Context;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -52,6 +53,8 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
         LinearLayout.LayoutParams layoutParams = (LayoutParams) params;
         layoutParams.gravity = Gravity.CENTER;
         layoutParams.weight = 1;
+        layoutParams.leftMargin = 5;
+        layoutParams.rightMargin = 5;
         for (int i = 0; i < mDefaultLength; i++) {
             EditText editText = new EditText(getContext()) {
                 @Override
@@ -152,6 +155,13 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
         assert inputMethodManager != null;
         if (inputMethodManager.isActive()) {
             inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
+        }
+    }
+
+    //设置每个输入框样式
+    public void setEditBoard(@DrawableRes int drawableRes) {
+        for (int i = 0; i < getChildCount(); i++) {
+            getChildAt(i).setBackgroundResource(drawableRes);
         }
     }
 
