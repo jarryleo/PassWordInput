@@ -8,6 +8,7 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -47,7 +48,7 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
         setOrientation(HORIZONTAL);
         ViewGroup.LayoutParams params = getLayoutParams();
         if (params == null) {
-            params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+            params = new LinearLayout.LayoutParams(0,
                     ViewGroup.LayoutParams.MATCH_PARENT);
         }
         LinearLayout.LayoutParams layoutParams = (LayoutParams) params;
@@ -162,6 +163,17 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
     public void setEditBoard(@DrawableRes int drawableRes) {
         for (int i = 0; i < getChildCount(); i++) {
             getChildAt(i).setBackgroundResource(drawableRes);
+        }
+    }
+
+    //设置字体大小
+    public void setTextSize(float textSize) {
+        float v = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, textSize, getResources().getDisplayMetrics());
+        for (int i = 0; i < getChildCount(); i++) {
+            View child = getChildAt(i);
+            if (child instanceof TextView) {
+                ((TextView) child).setTextSize(v);
+            }
         }
     }
 
