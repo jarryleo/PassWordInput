@@ -151,7 +151,9 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
     private void moveFocusNext() {
         if (mFocusIndex < mDefaultLength - 1) {
             ((TextView) getChildAt(mFocusIndex)).setCursorVisible(false);
-            getChildAt(++mFocusIndex).requestFocus();
+            View child = getChildAt(++mFocusIndex);
+            ((TextView) child).setCursorVisible(true);
+            child.requestFocus();
             return;
         }
         if (mInputCompleteListener != null &&
@@ -235,6 +237,22 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
         }
     }
 
+    //重置输入框
+    public void reset() {
+        for (int i = 0; i < getChildCount(); i++) {
+            View child = getChildAt(i);
+            if (child instanceof TextView) {
+                TextView textView = (TextView) child;
+                textView.setText("");
+                if (i == 0) {
+                    mFocusIndex = 0;
+                    textView.setCursorVisible(true);
+                    textView.requestFocus();
+                }
+            }
+        }
+    }
+
     public void setInputCompleteListener(PasswordInputCompleteListener inputCompleteListener) {
         mInputCompleteListener = inputCompleteListener;
     }
@@ -284,31 +302,7 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
         }
     }
 
-    public class NullMenuEditText extends EditText {
-
-        boolean canPaste() {
-            return false;
-        }
-
-        boolean canCut() {
-            return false;
-        }
-
-        boolean canCopy() {
-            return false;
-        }
-
-        boolean canSelectAllText() {
-            return false;
-        }
-
-        boolean canSelectText() {
-            return false;
-        }
-
-        boolean textCanBeSelected() {
-            return false;
-        }
+    private class NullMenuEditText extends EditText {
 
         public NullMenuEditText(Context context) {
             this(context, null);
