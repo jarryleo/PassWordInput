@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -181,12 +182,11 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
     //焦点前移
     private void moveFocusPre() {
         if (mFocusIndex > 0) {
-            View child = getChildAt(--mFocusIndex);
-            if (child instanceof TextView) {
-                TextView textView = (TextView) child;
-                textView.setCursorVisible(true);
-                textView.setText("");
-            }
+            TextView child = (TextView) getChildAt(mFocusIndex);
+            if (!(mFocusIndex == mDefaultLength - 1 && !TextUtils.isEmpty(child.getText())))
+                child = (TextView) getChildAt(--mFocusIndex);
+            child.setCursorVisible(true);
+            child.setText("");
             child.requestFocus();
         }
     }
