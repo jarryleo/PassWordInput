@@ -1,6 +1,8 @@
 package cn.leo.passwordinput;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -25,8 +27,21 @@ import android.widget.TextView;
  * create by : Jarry Leo
  * date : 2018/8/13 17:19
  */
+/*自定义属性:
+<declare-styleable name="PasswordInputLayout">
+    <attr name="pil_background" format="reference"/>
+    <attr name="pil_textSize" format="dimension"/>
+    <attr name="pil_textColor" format="color"/>
+    <attr name="pil_padding" format="dimension"/>
+    <attr name="pil_length" format="integer"/>
+    <attr name="pil_inputType" format="enum">
+        <enum name="pil_char" value="1"/>
+        <enum name="pil_number" value="2"/>
+    </attr>
+</declare-styleable>
+*/
 public class PasswordInputLayout extends LinearLayout implements TextWatcher, View.OnFocusChangeListener {
-    private static final int mDefaultLength = 6;
+    private int mDefaultLength = 6;
     private int mFocusIndex;
     private PasswordInputCompleteListener mInputCompleteListener;
     private StringBuilder mStringBuilder = new StringBuilder();
@@ -41,10 +56,18 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
 
     public PasswordInputLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(attrs);
     }
 
-    private void init() {
+    private void init(@Nullable AttributeSet attrs) {
+        TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.PasswordInputLayout);
+        int backgroundRes = typedArray.getResourceId(R.styleable.PasswordInputLayout_pil_background, 0);
+        int inputType = typedArray.getInt(R.styleable.PasswordInputLayout_pil_inputType, InputType.TYPE_CLASS_NUMBER);
+        int textSize = typedArray.getDimensionPixelSize(R.styleable.PasswordInputLayout_pil_textSize, 16);
+        int textColor = typedArray.getColor(R.styleable.PasswordInputLayout_pil_textColor, Color.BLACK);
+        mDefaultLength = typedArray.getInt(R.styleable.PasswordInputLayout_pil_length, 6);
+        int padding = typedArray.getDimensionPixelSize(R.styleable.PasswordInputLayout_pil_padding, 5);
+        typedArray.recycle();
         setOrientation(HORIZONTAL);
         ViewGroup.LayoutParams params = getLayoutParams();
         if (params == null) {
@@ -54,8 +77,8 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
         LinearLayout.LayoutParams layoutParams = (LayoutParams) params;
         layoutParams.gravity = Gravity.CENTER;
         layoutParams.weight = 1;
-        layoutParams.leftMargin = 5;
-        layoutParams.rightMargin = 5;
+        layoutParams.leftMargin = padding;
+        layoutParams.rightMargin = padding;
         for (int i = 0; i < mDefaultLength; i++) {
             EditText editText = new EditText(getContext()) {
                 @Override
@@ -69,7 +92,10 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
             editText.setOnFocusChangeListener(this);
             editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(1)});
             editText.setGravity(Gravity.CENTER);
-            editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+            editText.setBackgroundResource(backgroundRes);
+            editText.setInputType(inputType);
+            editText.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
+            editText.setTextColor(textColor);
             addView(editText, layoutParams);
         }
     }
@@ -168,11 +194,20 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
 
     //设置字体大小
     public void setTextSize(float textSize) {
-        float v = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, textSize, getResources().getDisplayMetrics());
         for (int i = 0; i < getChildCount(); i++) {
             View child = getChildAt(i);
             if (child instanceof TextView) {
-                ((TextView) child).setTextSize(v);
+                ((TextView) child).setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
+            }
+        }
+    }
+
+    //设置字体颜色
+    public void setTextColor(int textColor) {
+        for (int i = 0; i < getChildCount(); i++) {
+            View child = getChildAt(i);
+            if (child instanceof TextView) {
+                ((TextView) child).setTextColor(textColor);
             }
         }
     }
@@ -226,3 +261,4 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
         }
     }
 }
+

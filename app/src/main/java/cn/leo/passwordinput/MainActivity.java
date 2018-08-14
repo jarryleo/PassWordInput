@@ -11,8 +11,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         PasswordInputLayout passwordInputLayout = findViewById(R.id.pil_pw);
-        passwordInputLayout.setEditBoard(R.drawable.shape_edit_pic_verifycode_selector);
-        passwordInputLayout.setTextSize(18);
         passwordInputLayout.setInputCompleteListener(new PasswordInputLayout.PasswordInputCompleteListener() {
             @Override
             public void onInputComplete(String password) {

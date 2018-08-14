@@ -10,10 +10,12 @@
     <cn.leo.passwordinput.PasswordInputLayout
         android:id="@+id/pil_pw"
         android:layout_width="300dp"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:pil_background="@drawable/shape_edit_pic_verifycode_selector"
+        app:pil_textSize="22dp"/>
 
 </android.support.constraint.ConstraintLayout>
