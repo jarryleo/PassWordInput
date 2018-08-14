@@ -10,6 +10,7 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -29,15 +30,17 @@ import android.widget.TextView;
  */
 /*自定义属性:
 <declare-styleable name="PasswordInputLayout">
-    <attr name="pil_background" format="reference"/>
-    <attr name="pil_textSize" format="dimension"/>
-    <attr name="pil_textColor" format="color"/>
-    <attr name="pil_padding" format="dimension"/>
-    <attr name="pil_length" format="integer"/>
-    <attr name="pil_inputType" format="enum">
-        <enum name="pil_char" value="1"/>
-        <enum name="pil_number" value="2"/>
-    </attr>
+        <attr name="pil_background" format="reference"/>
+        <attr name="pil_textSize" format="dimension"/>
+        <attr name="pil_textColor" format="color"/>
+        <attr name="pil_padding" format="dimension"/>
+        <attr name="pil_length" format="integer"/>
+        <attr name="pil_inputType" format="enum">
+            <enum name="pil_char" value="1"/>
+            <enum name="pil_number" value="2"/>
+            <enum name="pil_char_password" value="129"/>
+            <enum name="pil_number_password" value="18"/>
+        </attr>
 </declare-styleable>
 */
 public class PasswordInputLayout extends LinearLayout implements TextWatcher, View.OnFocusChangeListener {
@@ -63,10 +66,11 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
         TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.PasswordInputLayout);
         int backgroundRes = typedArray.getResourceId(R.styleable.PasswordInputLayout_pil_background, 0);
         int inputType = typedArray.getInt(R.styleable.PasswordInputLayout_pil_inputType, InputType.TYPE_CLASS_NUMBER);
-        int textSize = typedArray.getDimensionPixelSize(R.styleable.PasswordInputLayout_pil_textSize, 16);
+        float textSize = typedArray.getDimension(R.styleable.PasswordInputLayout_pil_textSize,
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 18, getResources().getDisplayMetrics()));
         int textColor = typedArray.getColor(R.styleable.PasswordInputLayout_pil_textColor, Color.BLACK);
-        mDefaultLength = typedArray.getInt(R.styleable.PasswordInputLayout_pil_length, 6);
         int padding = typedArray.getDimensionPixelSize(R.styleable.PasswordInputLayout_pil_padding, 5);
+        mDefaultLength = typedArray.getInt(R.styleable.PasswordInputLayout_pil_length, 6);
         typedArray.recycle();
         setOrientation(HORIZONTAL);
         ViewGroup.LayoutParams params = getLayoutParams();
@@ -101,6 +105,23 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        if (widthMode == MeasureSpec.AT_MOST) {
+
+            float width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 300, displayMetrics) + 0.5f;
+            widthMeasureSpec = MeasureSpec.makeMeasureSpec((int) width, MeasureSpec.EXACTLY);
+        }
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        if (heightMode == MeasureSpec.AT_MOST) {
+            float height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, displayMetrics) + 0.5f;
+            heightMeasureSpec = MeasureSpec.makeMeasureSpec((int) height, MeasureSpec.EXACTLY);
+        }
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
+    @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
     }
@@ -121,9 +142,9 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if (hasFocus) {
-            mFocusIndex = findChildIndex(v);
-            if (v instanceof TextView) {
-                ((TextView) v).setText("");
+            int index = findChildIndex(v);
+            if (mFocusIndex != index) {
+                getChildAt(mFocusIndex).requestFocus();
             }
         }
     }
@@ -150,6 +171,7 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
                     }
                 }
             }
+
             mInputCompleteListener.onInputComplete(mStringBuilder.toString());
             hideSoftInput();
         }
@@ -197,7 +219,7 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
         for (int i = 0; i < getChildCount(); i++) {
             View child = getChildAt(i);
             if (child instanceof TextView) {
-                ((TextView) child).setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
+                ((TextView) child).setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
             }
         }
     }
