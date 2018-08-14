@@ -100,6 +100,8 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
             editText.setInputType(inputType);
             editText.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
             editText.setTextColor(textColor);
+            editText.setLongClickable(false);
+            editText.setTextIsSelectable(false);
             addView(editText, layoutParams);
         }
     }
@@ -152,6 +154,7 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
     //焦点后移
     private void moveFocusNext() {
         if (mFocusIndex < mDefaultLength - 1) {
+            ((TextView) getChildAt(mFocusIndex)).setCursorVisible(false);
             getChildAt(++mFocusIndex).requestFocus();
             return;
         }
@@ -182,7 +185,9 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
         if (mFocusIndex > 0) {
             View child = getChildAt(--mFocusIndex);
             if (child instanceof TextView) {
-                ((TextView) child).setText("");
+                TextView textView = (TextView) child;
+                textView.setCursorVisible(true);
+                textView.setText("");
             }
             child.requestFocus();
         }
