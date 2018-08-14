@@ -1,5 +1,6 @@
 package cn.leo.passwordinput;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -20,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputConnectionWrapper;
@@ -202,8 +204,21 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
         return -1;
     }
 
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        showSoftInput();
+    }
+
+    //显示输入法
+    private void showSoftInput() {
+        if (getContext() instanceof Activity) {
+            ((Activity) getContext()).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
+
     //隐藏输入法
-    public void hideSoftInput() {
+    private void hideSoftInput() {
         InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         assert inputMethodManager != null;
         if (inputMethodManager.isActive()) {
