@@ -223,11 +223,12 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
     //显示输入法,页面显示后
     private void showSoftInputOnVisible() {
         InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        assert inputMethodManager != null;
-        inputMethodManager.showSoftInput(getChildAt(mFocusIndex), 0);
+        if (inputMethodManager != null) {
+            inputMethodManager.showSoftInput(getChildAt(mFocusIndex), 0);
+        }
     }
 
-    //显示输入法页面启动时
+    //显示输入法,页面启动时
     private void showSoftInputOnStart() {
         if (getContext() instanceof Activity) {
             ((Activity) getContext()).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
@@ -237,8 +238,7 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
     //隐藏输入法
     private void hideSoftInput() {
         InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        assert inputMethodManager != null;
-        if (inputMethodManager.isActive()) {
+        if (inputMethodManager != null && inputMethodManager.isActive()) {
             inputMethodManager.hideSoftInputFromWindow(getWindowToken(), 0);
         }
     }
