@@ -19,6 +19,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -101,6 +102,9 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
             editText.setTextColor(textColor);
             editText.setLongClickable(false);
             editText.setTextIsSelectable(false);
+            if (i > 0) {
+                editText.setCursorVisible(false);
+            }
             addView(editText, layoutParams);
         }
     }
@@ -207,11 +211,24 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        showSoftInput();
+        showSoftInputOnStart();
     }
 
-    //显示输入法
-    private void showSoftInput() {
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        showSoftInputOnVisible();
+        return super.dispatchTouchEvent(ev);
+    }
+
+    //显示输入法,页面显示后
+    private void showSoftInputOnVisible() {
+        InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        assert inputMethodManager != null;
+        inputMethodManager.showSoftInput(getChildAt(mFocusIndex), 0);
+    }
+
+    //显示输入法页面启动时
+    private void showSoftInputOnStart() {
         if (getContext() instanceof Activity) {
             ((Activity) getContext()).getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
