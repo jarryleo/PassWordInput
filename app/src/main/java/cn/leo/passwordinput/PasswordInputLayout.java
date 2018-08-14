@@ -12,8 +12,11 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.ActionMode;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -84,14 +87,7 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
         layoutParams.leftMargin = padding;
         layoutParams.rightMargin = padding;
         for (int i = 0; i < mDefaultLength; i++) {
-            EditText editText = new EditText(getContext()) {
-                @Override
-                public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
-                    TInputConnection tInputConnection = new TInputConnection(null, true);
-                    tInputConnection.setTarget(super.onCreateInputConnection(outAttrs));
-                    return tInputConnection;
-                }
-            };
+            EditText editText = new NullMenuEditText(getContext());
             editText.addTextChangedListener(this);
             editText.setOnFocusChangeListener(this);
             editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(1)});
@@ -285,6 +281,77 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
                 moveFocusPre();
             }
             return super.sendKeyEvent(event);
+        }
+    }
+
+    public class NullMenuEditText extends EditText {
+
+        boolean canPaste() {
+            return false;
+        }
+
+        boolean canCut() {
+            return false;
+        }
+
+        boolean canCopy() {
+            return false;
+        }
+
+        boolean canSelectAllText() {
+            return false;
+        }
+
+        boolean canSelectText() {
+            return false;
+        }
+
+        boolean textCanBeSelected() {
+            return false;
+        }
+
+        public NullMenuEditText(Context context) {
+            this(context, null);
+        }
+
+        public NullMenuEditText(Context context, AttributeSet attrs) {
+            super(context, attrs);
+            setLongClickable(false);
+            setTextIsSelectable(false);
+            setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+                @Override
+                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
+
+                @Override
+                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
+
+                @Override
+                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    return false;
+                }
+
+                @Override
+                public void onDestroyActionMode(ActionMode mode) {
+
+                }
+            });
+
+        }
+
+        @Override
+        public boolean onTextContextMenuItem(int id) {
+            return true;
+        }
+
+        @Override
+        public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
+            TInputConnection tInputConnection = new TInputConnection(null, true);
+            tInputConnection.setTarget(super.onCreateInputConnection(outAttrs));
+            return tInputConnection;
         }
     }
 }
