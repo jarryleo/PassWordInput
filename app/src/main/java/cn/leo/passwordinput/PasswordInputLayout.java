@@ -134,6 +134,7 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
     public void afterTextChanged(Editable s) {
         int length = s.length();
         if (length >= 1) {
+            ((TextView) getChildAt(mFocusIndex)).setCursorVisible(false);
             moveFocusNext();
         }
     }
