@@ -80,17 +80,15 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
         mDefaultLength = typedArray.getInt(R.styleable.PasswordInputLayout_pil_length, 6);
         typedArray.recycle();
         setOrientation(HORIZONTAL);
-        ViewGroup.LayoutParams params = getLayoutParams();
-        if (params == null) {
-            params = new LinearLayout.LayoutParams(0,
-                    ViewGroup.LayoutParams.MATCH_PARENT);
-        }
-        LinearLayout.LayoutParams layoutParams = (LayoutParams) params;
-        layoutParams.gravity = Gravity.CENTER;
-        layoutParams.weight = 1;
-        layoutParams.leftMargin = padding;
-        layoutParams.rightMargin = padding;
         for (int i = 0; i < mDefaultLength; i++) {
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
+            layoutParams.gravity = Gravity.CENTER;
+            layoutParams.weight = 1;
+            layoutParams.leftMargin = padding;
+            layoutParams.rightMargin = padding;
+            if (i == 0) layoutParams.leftMargin = 0;
+            if (i == mDefaultLength - 1) layoutParams.rightMargin = 0;
             EditText editText = new NullMenuEditText(getContext());
             editText.addTextChangedListener(this);
             editText.setOnFocusChangeListener(this);
@@ -281,6 +279,7 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
                     mFocusIndex = 0;
                     textView.setCursorVisible(true);
                     textView.requestFocus();
+                    SoftInputUtil.showSoftInput(textView);
                 }
             }
         }

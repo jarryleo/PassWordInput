@@ -18,7 +18,7 @@ public class SoftInputUtil {
      *
      * @param v 需要输入的view
      */
-    public static void ShowSoftInput(@NonNull View v) {
+    public static void showSoftInput(@NonNull View v) {
         Context context = v.getContext();
         InputMethodManager inputMethodManager =
                 (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);

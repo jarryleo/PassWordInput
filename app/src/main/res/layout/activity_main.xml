@@ -21,6 +21,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:pil_background="@drawable/selector_edit_bg"/>
+        app:pil_background="@drawable/selector_edit_bg"
+        app:pil_length="4"
+        app:pil_padding="6dp"/>
 
 </android.support.constraint.ConstraintLayout>
