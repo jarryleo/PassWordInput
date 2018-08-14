@@ -13,6 +13,11 @@ import android.view.inputmethod.InputMethodManager;
  * date : 2018/8/14 14:23
  */
 public class SoftInputUtil {
+    /**
+     * 弹出输入法
+     *
+     * @param v 需要输入的view
+     */
     public static void ShowSoftInput(@NonNull View v) {
         Context context = v.getContext();
         InputMethodManager inputMethodManager =
@@ -22,6 +27,9 @@ public class SoftInputUtil {
             activity = (Activity) context;
         }
         if (inputMethodManager != null) {
+            v.setFocusable(true);
+            v.setFocusableInTouchMode(true);
+            v.requestFocus();
             inputMethodManager.showSoftInput(v, 0);
             if (activity != null && !activity.isFinishing()) {
                 activity.getWindow().setSoftInputMode(
@@ -30,6 +38,11 @@ public class SoftInputUtil {
         }
     }
 
+    /**
+     * 收起输入法
+     *
+     * @param v 当前页面的view
+     */
     public static void hideSoftInput(@NonNull View v) {
         Context context = v.getContext();
         InputMethodManager inputMethodManager =
