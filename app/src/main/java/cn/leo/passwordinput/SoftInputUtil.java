@@ -8,7 +8,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 /**
- * 输入方弹出隐藏类
+ * 输入法弹出隐藏类
  * create by : Jarry Leo
  * date : 2018/8/14 14:23
  */
@@ -30,7 +30,7 @@ public class SoftInputUtil {
             v.setFocusable(true);
             v.setFocusableInTouchMode(true);
             v.requestFocus();
-            inputMethodManager.showSoftInput(v, 0);
+            inputMethodManager.showSoftInput(v, InputMethodManager.SHOW_FORCED);
             if (activity != null && !activity.isFinishing()) {
                 activity.getWindow().setSoftInputMode(
                         WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
