@@ -2,7 +2,11 @@ package cn.leo.passwordinput;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.MenuPopupWindow;
+import android.view.ViewAnimationUtils;
 import android.widget.Toast;
+
+import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
 
