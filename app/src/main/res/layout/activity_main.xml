@@ -22,7 +22,8 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:pil_background="@drawable/selector_edit_bg"
-        app:pil_length="4"
+        app:pil_length="6"
+        app:pil_inputType="pil_number_password"
         app:pil_padding="6dp"/>
 
 </android.support.constraint.ConstraintLayout>

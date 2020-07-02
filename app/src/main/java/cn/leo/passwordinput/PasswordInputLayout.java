@@ -178,7 +178,7 @@ public class PasswordInputLayout extends LinearLayout implements TextWatcher, Vi
                     }
                 }
             }
-
+            requestFocus();
             mInputCompleteListener.onInputComplete(mStringBuilder.toString());
             hideSoftInput();
         }
